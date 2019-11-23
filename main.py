@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
+import os
 import sys
 
 from PySide2.QtWidgets import QApplication
 
 from imgtag import MainWindow, settings
+from imgtag.data import File, FileTag, Tag, db
 from imgtag.logger import get_logger
+from imgtag.settings import DB_FILEPATH
 
 VER_MAJ_REQ, VER_MIN_REQ = 3, 7
 
@@ -14,6 +17,12 @@ logger = get_logger(__name__)
 
 def init():
     check_version()
+
+    # Create database if not present
+    if not os.path.exists(DB_FILEPATH):
+        db.connect()
+        db.create_tables([File, Tag, FileTag])
+        logger.debug('Created all tables')
 
 
 def check_version():
