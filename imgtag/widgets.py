@@ -44,13 +44,43 @@ class FileTreeView(QTreeView):
         selection_model = self.selectionModel()
         selection_model.selectionChanged.connect(callback_selection_changed)
 
+        # Set fixed width for filename column
+        self.setColumnWidth(0, 350)
+        for i in range(1, self.model().columnCount() + 1):
+            self.resizeColumnToContents(i)
+
 
 class FileTreeModel(QFileSystemModel):
     """A filesystem tree model that can be extended with custom columns."""
     def __init__(self):
         super().__init__()
 
-    # NOTE: Add custom columns by overriding data methods here
+    # Override
+    def columnCount(self, parent=QModelIndex()):
+        return super().columnCount() + 1
+
+    # Override
+    def data(self, index, role):
+        if index.column() < self.columnCount() - 1:
+            return super().data(index, role)
+
+        if role == Qt.DisplayRole:
+            filename = self.fileName(index.siblingAtColumn(0))
+            if not is_image_file(filename):
+                return '-'
+            if index.column() == self.columnCount() - 1:
+                return str(len(get_file_tags(filename)))
+
+    # Override
+    def headerData(self, section, orientation, role):
+        if section < self.columnCount() - 1:
+            return super().headerData(section, orientation, role)
+
+        if role == Qt.DisplayRole:
+            if section == self.columnCount() - 1:
+                return '# Tags'
+        if role == Qt.TextAlignmentRole:
+            return Qt.AlignHCenter
 
 
 class FileTagView(QWidget):
