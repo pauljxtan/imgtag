@@ -27,6 +27,7 @@ class FileTab(QWidget):
 
     def _layout(self) -> QGridLayout:
         layout = QGridLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
 
         splitter = QSplitter()
         layout.addWidget(splitter, 0, 0, 0, 0)
@@ -77,6 +78,7 @@ class GalleryTab(QWidget):
 
     def _layout(self) -> Tuple[QGridLayout, GalleryView, QLineEdit, TagListView, ImageView]:
         layout = QGridLayout()
+        layout.setContentsMargins(5, 5, 5, 5)
 
         # Gallery
         gallery = GalleryView(self._load_image)
@@ -89,6 +91,7 @@ class GalleryTab(QWidget):
         splitter.addWidget(left)
 
         left_layout = QGridLayout()
+        left_layout.setContentsMargins(0, 0, 0, 0)
         left.setLayout(left_layout)
 
         # Tag search

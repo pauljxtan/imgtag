@@ -92,6 +92,7 @@ class FileTagView(QWidget):
         self._selected_filepath = ''
 
         layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(layout)
 
         # Tag entry
@@ -104,6 +105,7 @@ class FileTagView(QWidget):
         # Tag list
         self._taglist = TagListView(self._remove_file_tag)
         layout.addWidget(self._taglist, 1, 0, 1, 2)
+
 
     # -- Public
 
@@ -238,6 +240,8 @@ class GalleryView(QWidget):
 
     def _layout(self) -> Tuple[QGridLayout, QComboBox, QLabel, QLabel, QListWidget]:
         layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
+
         page_label = QLabel('Page:')
         page_label.setFixedWidth(40)
         layout.addWidget(page_label, 0, 0)
