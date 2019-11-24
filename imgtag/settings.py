@@ -16,7 +16,7 @@ config.read(CONFIG_FILEPATH)
 DB_FILEPATH = os.path.join(PROJECT_ROOT, config['database']['filename'])
 
 # Filesystem
-ROOT_DIR = config['filesystem']['root_dir']
+ROOT_DIR = os.path.expanduser(config['filesystem']['root_dir'])
 IMAGE_EXTS = config['filesystem']['image_extensions'].split(',')
 
 # Logging
