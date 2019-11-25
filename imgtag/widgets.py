@@ -2,6 +2,7 @@
 
 import itertools
 import os
+import random
 from typing import Callable, List, Tuple
 
 from PySide2.QtCore import QModelIndex, QObject, QRunnable, QSize, Qt, QThreadPool, Signal, Slot
@@ -105,7 +106,6 @@ class FileTagView(QWidget):
         # Tag list
         self._taglist = TagListView(self._remove_file_tag)
         layout.addWidget(self._taglist, 1, 0, 1, 2)
-
 
     # -- Public
 
@@ -279,9 +279,11 @@ class GalleryView(QWidget):
             return count
         return count + 1
 
-    def search(self, text: str):
+    def search(self, text: str, shuffle: bool):
         tags = text.split()
         filenames = get_files_with_tags(tags)
+        if shuffle:
+            random.shuffle(filenames)
         self.populate(filenames)
         self._query_label.setText(
             f'Query: {tags} | {len(filenames)} images ({self.page_count} pages)')

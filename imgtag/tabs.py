@@ -4,7 +4,8 @@ import os
 from typing import Tuple
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import QGridLayout, QLabel, QLineEdit, QScrollArea, QSplitter, QWidget
+from PySide2.QtWidgets import (QCheckBox, QGridLayout, QLabel, QLineEdit, QScrollArea, QSplitter,
+                               QWidget)
 
 from .state import GlobalState
 from .utils import is_image_file
@@ -71,12 +72,14 @@ class GalleryTab(QWidget):
 
         self.global_state = global_state
 
-        layout, self._gallery, self._entry, self._taglist, self._image = self._layout()
+        (layout, self._gallery, self._entry, self._shuffle, self._taglist,
+         self._image) = self._layout()
         self.setLayout(layout)
 
     # -- Initialization
 
-    def _layout(self) -> Tuple[QGridLayout, GalleryView, QLineEdit, TagListView, ImageView]:
+    def _layout(self
+                ) -> Tuple[QGridLayout, GalleryView, QLineEdit, QCheckBox, TagListView, ImageView]:
         layout = QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
@@ -101,9 +104,13 @@ class GalleryTab(QWidget):
         entry.setCompleter(self.global_state.tag_completer)
         left_layout.addWidget(entry, 0, 1)
 
+        # Shuffle toggle
+        shuffle = QCheckBox('Shuffle?')
+        left_layout.addWidget(shuffle, 0, 2)
+
         # Tag list
         taglist = TagListView()
-        left_layout.addWidget(taglist, 1, 0, 1, 2)
+        left_layout.addWidget(taglist, 1, 0, 1, 3)
 
         # Image
         image = ImageView()
@@ -112,7 +119,7 @@ class GalleryTab(QWidget):
         # Initialize equal widths (needs to be set at the end)
         splitter.setSizes([1000000, 1000000])
 
-        return layout, gallery, entry, taglist, image
+        return layout, gallery, entry, shuffle, taglist, image
 
     # -- Callbacks
 
@@ -122,7 +129,8 @@ class GalleryTab(QWidget):
 
     def _search(self):
         text = self._entry.text().strip().lower()
-        self._gallery.search(text)
+        shuffle = self._shuffle.checkState() == Qt.Checked
+        self._gallery.search(text, shuffle=shuffle)
 
 
 def wrap_image(image: ImageView) -> QScrollArea:
