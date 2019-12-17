@@ -1,3 +1,7 @@
+SHELL :=bash
+.ONESHELL:
+.DELETE_ON_ERROR:
+
 # Modify according to the name of your virtualenv
 activate_venv = . venv/bin/activate
 
@@ -8,15 +12,15 @@ clean:
 	rm -rfv .beaker_cache
 
 lint:
-	$(activate_venv); \
-		isort -df -rc -w 99 imgtag; \
-		yapf -dr main.py imgtag; \
-		pylama imgtag; \
-		mypy --ignore-missing-imports imgtag
+	$(activate_venv)
+	isort -df -rc -w 99 imgtag
+	yapf -dr main.py imgtag
+	pylama imgtag
+	mypy --ignore-missing-imports imgtag
 
 run:
-	$(activate_venv); \
-		python main.py
+	$(activate_venv)
+	python main.py
 
 test:
 	@echo "TODO"

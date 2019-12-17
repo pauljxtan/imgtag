@@ -129,7 +129,7 @@ class GalleryTab(QWidget):
 
     def _search(self):
         text = self._entry.text().strip().lower()
-        shuffle = self._shuffle.checkState() == Qt.Checked
+        shuffle = self._shuffle.isChecked()
         self._gallery.search(text, shuffle=shuffle)
 
 

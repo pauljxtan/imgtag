@@ -77,10 +77,12 @@ def set_file_path(filename: str, path: str):
 def get_file_paths(root_path: str, filenames: List[str]) -> List[str]:
     """Returns the full paths for the given filenames.
 
-    If the path is not cached in the database, manually resolves the path and updates the database.
+    If the path is not cached in the database or is invalid, manually resolves the path and updates
+    the database.
     """
     paths = []
     for filename, filepath in ((filename, get_file_path(filename)) for filename in filenames):
+        # NOTE: Need to check if path is valid in case we get an outdated cached path
         if not filepath or not os.path.exists(filepath):
             filepath = _resolve_filepath(root_path, filename)
             if filepath:
