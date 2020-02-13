@@ -149,11 +149,15 @@ def get_files_with_tag(tagname: str) -> List[str]:
         [fil.name for fil in File.select(File.name).join(FileTag).where(FileTag.tag == tag)])
 
 
-def get_files_with_tags(tagnames: List[str]) -> List[str]:
+def get_files_with_tags(tagnames: List[str], excluded_tagnames: List[str]=[]) -> List[str]:
     results = set(get_files_with_tag(tagnames[0]))
     for tagname in tagnames[1:]:
         filenames = set(get_files_with_tag(tagname))
         results = results.intersection(filenames)
+    # Filter out files with at least one excluded tag
+    for tagname in excluded_tagnames:
+        filenames = set(get_files_with_tag(tagname))
+        results = results.difference(filenames)
     return sorted(list(results))
 
 

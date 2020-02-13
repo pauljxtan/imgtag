@@ -281,7 +281,8 @@ class GalleryView(QWidget):
 
     def search(self, text: str, shuffle: bool):
         tags = text.split()
-        filenames = get_files_with_tags(tags)
+        filenames = get_files_with_tags([t for t in tags if not t.startswith('-')],
+                                        [t[1:] for t in tags if t.startswith('-')])
         if shuffle:
             random.shuffle(filenames)
         self.populate(filenames)
