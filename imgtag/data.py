@@ -63,7 +63,8 @@ def get_file_path(filename: str) -> str:
     if path:
         set_file_path(filename, path)
         return path
-    raise ValueError(f'Unable to resolve path for {filename}')
+    # raise ValueError(f'Unable to resolve path for {filename}')
+    return ''
 
 
 def set_file_path(filename: str, path: str):
