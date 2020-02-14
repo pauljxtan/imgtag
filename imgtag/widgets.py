@@ -5,7 +5,8 @@ import os
 import random
 from typing import Callable, List, Tuple
 
-from PySide2.QtCore import QModelIndex, QObject, QRunnable, QSize, Qt, QThreadPool, Signal, Slot
+from PySide2.QtCore import (QEvent, QModelIndex, QObject, QRunnable, QSize, Qt, QThreadPool,
+                            Signal, Slot)
 from PySide2.QtGui import QContextMenuEvent, QIcon, QPixmap, QStandardItem, QStandardItemModel
 from PySide2.QtWidgets import (QAction, QComboBox, QFileSystemModel, QGridLayout, QHeaderView,
                                QLabel, QLineEdit, QListWidget, QListWidgetItem, QMenu, QSizePolicy,
@@ -98,7 +99,7 @@ class FileTagView(QWidget):
 
         # Tag entry
         layout.addWidget(QLabel('Add tag:'), 0, 0)
-        self._entry = QLineEdit()
+        self._entry = MultiTagEntry()
         self._entry.returnPressed.connect(self._add_file_tag)
         self._entry.setCompleter(self.global_state.tag_completer)
         layout.addWidget(self._entry, 0, 1)
@@ -355,3 +356,23 @@ class IconWorker(QRunnable):
     def run(self):
         icon = QIcon(self._filepath)
         self.signal.result.emit((self._item_idx, icon, self._filepath, self._label))
+
+
+class MultiTagEntry(QLineEdit):
+    tabPressed = Signal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.tabPressed.connect(self.cycle_completion)
+
+    def cycle_completion(self):
+        self.completer().popup().setCurrentIndex(self.completer().currentIndex())
+        idx = self.completer().currentRow()
+        if not self.completer().setCurrentRow(idx + 1):
+            self.completer().setCurrentRow(0)
+
+    def event(self, event):
+        if event.type() == QEvent.KeyPress and event.key() == Qt.Key_Tab:
+            self.tabPressed.emit()
+            return True
+        return super().event(event)

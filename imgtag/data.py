@@ -149,7 +149,7 @@ def get_files_with_tag(tagname: str) -> List[str]:
         [fil.name for fil in File.select(File.name).join(FileTag).where(FileTag.tag == tag)])
 
 
-def get_files_with_tags(tagnames: List[str], excluded_tagnames: List[str]=[]) -> List[str]:
+def get_files_with_tags(tagnames: List[str], excluded_tagnames: List[str] = []) -> List[str]:
     results = set(get_files_with_tag(tagnames[0]))
     for tagname in tagnames[1:]:
         filenames = set(get_files_with_tag(tagname))

@@ -4,12 +4,11 @@ import os
 from typing import Tuple
 
 from PySide2.QtCore import Qt
-from PySide2.QtWidgets import (QCheckBox, QGridLayout, QLabel, QLineEdit, QScrollArea, QSplitter,
-                               QWidget)
+from PySide2.QtWidgets import QCheckBox, QGridLayout, QLabel, QScrollArea, QSplitter, QWidget
 
 from .state import GlobalState
 from .utils import is_image_file
-from .widgets import FileTagView, FileTreeView, GalleryView, ImageView, TagListView
+from .widgets import FileTagView, FileTreeView, GalleryView, ImageView, MultiTagEntry, TagListView
 
 
 class FileTab(QWidget):
@@ -78,8 +77,7 @@ class GalleryTab(QWidget):
 
     # -- Initialization
 
-    def _layout(self
-                ) -> Tuple[QGridLayout, GalleryView, QLineEdit, QCheckBox, TagListView, ImageView]:
+    def _layout(self) -> Tuple:
         layout = QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
@@ -99,7 +97,7 @@ class GalleryTab(QWidget):
 
         # Tag search
         left_layout.addWidget(QLabel('Search:'), 0, 0)
-        entry = QLineEdit()
+        entry = MultiTagEntry()
         entry.returnPressed.connect(self._search)
         entry.setCompleter(self.global_state.tag_completer)
         left_layout.addWidget(entry, 0, 1)
