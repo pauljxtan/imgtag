@@ -4,19 +4,24 @@ SHELL :=bash
 
 # Modify according to the name of your virtualenv
 activate_venv = . venv/bin/activate
+format_files = main.py imgtag
+lint_files = main.py imgtag
 
 default: lint
 
 clean:
-	fd -I __pycache__ imgtag -x rm -rfv {}
-	rm -rfv .beaker_cache
+	find imgtag -name __pycache__ -type d -exec rm -rv {} +
+	rm -rv .beaker_cache
+
+fmt:
+	$(activate_venv)
+	isort -rc $(format_files)
+	yapf -ir $(format_files)
 
 lint:
 	$(activate_venv)
-	isort -df -rc -w 99 imgtag
-	yapf -dr main.py imgtag
-	pylama imgtag
-	mypy --ignore-missing-imports imgtag
+	pylama $(lint_files)
+	mypy --ignore-missing-imports $(lint_files)
 
 run:
 	$(activate_venv)

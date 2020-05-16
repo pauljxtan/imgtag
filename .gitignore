@@ -1,9 +1,5 @@
-**/__pycache__
+__pycache__
 .mypy_cache
 .beaker_cache
 
-venv
-activate
-
-imgtag.db*
-migrations.py
+imgtag.db

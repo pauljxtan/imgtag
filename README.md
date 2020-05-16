@@ -12,7 +12,9 @@ You may want to give it a try if you like the idea of "booru"-style imageboards 
 
 All development and testing is currently done on Linux. It most likely runs on OS X, and maybe on Windows, but no guarantees.
 
-TODO: add screenshots for file and gallery view
+An example of a gallery query by multiple tags:
+
+![gallery](./gallery_example_200516.jpg)
 
 ## Running
 
@@ -50,10 +52,17 @@ $ python main.py
 
 ## Data model
 
-The data model is kept as simple as possible to allow easy scripting.
+The data model is kept as simple as possible to allow easy scripting. Essentially, images have a many-to-many relationship with tags. Image filepaths are also cached in the database for faster lookups. That's basically it.
 
-Essentially, images have a many-to-many relationship with tags. Image filepaths are also cached in the database for faster lookups. That's basically it.
+Image tags created in `imgtag` can be easily ported other applications with simple queries, e.g.,
+
+```sql
+select file.name, tag.name
+from filetag
+inner join file on filetag.fil_id = file.id
+inner join tag on filetag.tag_id = tag.id 
+```
 
 ## Contributing
 
-PRs are welcome - please run `make lint` before commits.
+PRs are welcome - please run `make fmt` and `make lint` before commits.

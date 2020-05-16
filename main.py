@@ -5,7 +5,7 @@ import sys
 
 from PySide2.QtWidgets import QApplication
 
-from imgtag import MainWindow, settings
+from imgtag import MainWindow
 from imgtag.data import File, FileTag, Tag, db
 from imgtag.logger import get_logger
 from imgtag.settings import DB_FILEPATH
