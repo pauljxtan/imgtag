@@ -6,7 +6,7 @@ from PySide2.QtCore import QObject, QRunnable, QSize, Qt, QThreadPool, Signal, S
 from PySide2.QtGui import QIcon
 from PySide2.QtWidgets import QComboBox, QGridLayout, QLabel, QListWidget, QListWidgetItem, QWidget
 
-from ..data import get_file_paths, get_files_with_tags
+from ..data import get_file_metadata, get_file_paths, get_files_with_tags
 from ..logger import get_logger
 from ..settings import ROOT_DIR
 
@@ -124,7 +124,7 @@ class GalleryView(QWidget):
             if not filepath:
                 continue
             # Thumbnail loads are a little slow, so push them to the background
-            worker = IconWorker(i, filepath, label='')
+            worker = IconWorker(i, filepath)
             worker.signal.result.connect(self._set_icon)
             self._thread_pool.start(worker)
 
@@ -143,14 +143,19 @@ class IconWorkerSignal(QObject):
 
 class IconWorker(QRunnable):
     """An async worker used to load thumbnails in the background."""
-    def __init__(self, item_idx: int, filepath: str, label: str):
+    def __init__(self, item_idx: int, filepath: str):
         super().__init__()
         self._item_idx = item_idx
         self._filepath = filepath
-        self._label = label
         self.signal = IconWorkerSignal()
 
     @Slot()
     def run(self):
         icon = QIcon(self._filepath)
-        self.signal.result.emit((self._item_idx, icon, self._filepath, self._label))
+        label = self._get_label()
+        self.signal.result.emit((self._item_idx, icon, self._filepath, label))
+
+    def _get_label(self):
+        filename = os.path.split(self._filepath)[-1]
+        meta = get_file_metadata(filename)
+        return f'Tags: {meta["tag_count"]}'

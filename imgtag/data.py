@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple
 
 import peewee as pw
 from beaker.cache import CacheManager
@@ -186,6 +186,13 @@ def remove_file_tag(filename: str, tagname: str) -> int:
     n_rows = FileTag.delete().where((FileTag.fil == fil) & (FileTag.tag == tag)).execute()
     logger.info(f'Removed tag {tagname} from {filename} ({n_rows} row(s) modified)')
     return n_rows
+
+
+# TODO caching + invalidation
+def get_file_metadata(filename: str) -> Dict[str, Any]:
+    [fil] = File.select(pw.fn.Count(FileTag.id).alias('tag_count')).join(
+        FileTag, pw.JOIN.LEFT_OUTER).where(File.name == filename)
+    return {'tag_count': fil.tag_count}
 
 
 # -- Misc
