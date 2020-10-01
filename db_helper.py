@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Helper script for working directly with the database."""
 
-import logging
 import shutil
 import sys
 from argparse import ArgumentParser

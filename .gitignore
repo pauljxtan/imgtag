@@ -1,5 +1,6 @@
 __pycache__
 .mypy_cache
 .beaker_cache
+.venv
 
 imgtag.db

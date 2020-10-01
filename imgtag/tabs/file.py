@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from PySide2.QtCore import Qt
 from PySide2.QtWidgets import QGridLayout, QSplitter, QWidget
 
@@ -20,7 +22,7 @@ class FileTab(QWidget):
 
     # -- Initialization
 
-    def _layout(self) -> QGridLayout:
+    def _layout(self) -> Tuple[QGridLayout, FileTreeView, FileTagView, ImageView]:
         layout = QGridLayout()
         layout.setContentsMargins(5, 5, 5, 5)
 
