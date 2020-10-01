@@ -1,5 +1,7 @@
 # imgtag
 
+![Main](https://github.com/pauljxtan/imgtag/workflows/Main/badge.svg)
+
 `imgtag` is a lightweight and minimalist desktop application for tagging and searching a collection of image files.
 
 You may want to give it a try if you like the idea of "booru"-style imageboards but would like to:
