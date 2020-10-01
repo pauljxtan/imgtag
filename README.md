@@ -31,13 +31,7 @@ root_dir = /path/to/your/pics
 ...
 ```
 
-Install the dependencies in a virtualenv:
-
-```shell
-$ make deps
-```
-
-Run it:
+Run it (dependencies are automatically installed):
 
 ```shell
 $ make run
