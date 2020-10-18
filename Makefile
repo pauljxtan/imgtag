@@ -22,11 +22,11 @@ clean:
 	rm -rv .beaker_cache
 
 fmt: venv
-	$(venv)/bin/isort -rc $(format_files)
+	$(venv)/bin/isort $(format_files)
 	$(venv)/bin/yapf -ir $(format_files)
 
 lint: venv
-	$(venv)/bin/pylama $(lint_files)
+	$(venv)/bin/pylint $(lint_files)
 	$(venv)/bin/mypy --ignore-missing-imports $(lint_files)
 
 run: venv
